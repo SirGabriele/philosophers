@@ -6,7 +6,7 @@
 #    By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/20 10:12:21 by kbrousse          #+#    #+#              #
-#    Updated: 2022/09/01 22:03:53 by kbrousse         ###   ########.fr        #
+#    Updated: 2022/09/02 18:34:13 by kbrousse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRC = main.c			\
 
 UTILS = utils.c
 
-INIT = init_context_ph.c
+INIT = init_structures.c
 
 SRCS = $(addprefix src/, $(SRC))		\
 	$(addprefix src/utils/, $(UTILS))	\

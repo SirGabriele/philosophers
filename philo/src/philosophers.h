@@ -20,16 +20,22 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef struct s_philo_ph t_philo_ph;
-typedef struct s_context_ph t_context_ph;
+typedef struct s_philo_ph	t_philo_ph;
+typedef struct s_context_ph	t_context_ph;
+typedef struct s_mutex_ph	t_mutex_ph;
+
+struct s_mutex_ph
+{
+	pthread_mutex_t		mutex_fork;
+	pthread_mutex_t		mutex_write;
+};
 
 struct s_philo_ph
 {
 	pthread_t			thread;
 	int					philo_id;
-	pthread_mutex_t		mutex_fork;
-	pthread_mutex_t		mutex_write;
-	t_context_ph			*context_ph;
+	t_context_ph		*context_ph;
+	struct s_mutex_ph	*mutex;
 };
 
 struct s_context_ph
@@ -39,8 +45,9 @@ struct s_context_ph
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_meals_required;
-	t_philo_ph		thread[200];
 	int				nb_forks_available;
+	t_philo_ph		thread[1024];
+	t_philo_ph		monitoring;
 	struct timeval	time_start_sim;
 };
 
@@ -49,7 +56,7 @@ int				launch_program(t_context_ph *context_ph);
 void			clear_program(t_context_ph *context_ph);
 
 //Init
-void			init_context_ph(t_context_ph *context_ph);
+void			init_context_ph(t_context_ph *context_ph, char **argv);
 
 //Utils
 void			*ft_memset(void *s, int c, size_t n);

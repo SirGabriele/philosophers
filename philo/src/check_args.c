@@ -71,19 +71,6 @@ static int	check_charac_validity(char *argv)
 	return (0);
 }
 
-static void	fill_data_struct_context_ph(t_context_ph *context_ph, char **argv)
-{
-	context_ph->nb_philo = ft_atol(argv[1]);
-	context_ph->time_to_die = ft_atol(argv[2]);
-	context_ph->time_to_eat = ft_atol(argv[3]);
-	context_ph->time_to_sleep = ft_atol(argv[4]);
-	if (argv[5] != NULL)
-		context_ph->nb_meals_required = ft_atol(argv[5]);
-	else
-		context_ph->nb_meals_required = -1;
-	context_ph->nb_forks_available = context_ph->nb_philo;
-}
-
 int	check_args(t_context_ph *context_ph, char **argv)
 {
 	int	i;
@@ -94,14 +81,14 @@ int	check_args(t_context_ph *context_ph, char **argv)
 		if (check_minus_plus_usage(argv[i]) == -1
 			|| check_charac_validity(argv[i]) == -1
 			|| count_numbers(argv[i]) > 1
-			|| is_an_int(argv[i]) == -1)
+			|| is_an_int(argv[i]) == 1
+			|| ft_atol(argv[1]) > 1024)
 		{
 			printf("Error\nInvalid argument at parameter #%d\n", i);
 			return (-1);
 		}
 	}
-	init_context_ph(context_ph);
-	fill_data_struct_context_ph(context_ph, argv);
+	init_context_ph(context_ph, argv);
 	if (context_ph->nb_meals_required <= 0 && argv[5] != NULL)
 	{
 		printf("Number of meal asked is equal or less than 0\n");

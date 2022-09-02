@@ -14,35 +14,21 @@
 
 static void	*routine(void *philo)
 {
-	t_philo_ph	*copy;
-
-	copy = (t_philo_ph *)philo;
-	printf("begin routine\n");
-	pthread_mutex_lock(&copy->mutex_fork);
-	if (copy->context_ph->nb_forks_available >= 2)
-	{
-		copy->context_ph->nb_forks_available -= 2;
-		printf("philo %d is eating\n", copy->philo_id);
-	}
-	pthread_mutex_unlock(&copy->mutex_fork);
-	return ((void *)1);
+	(void)philo;
+	return (NULL);
 }
 
 int	launch_program(t_context_ph *context_ph)
 {
 	int	i;
-	int	*mem;
 
 	i = 1;
 	while (i <= context_ph->nb_philo)
 	{
-		mem = malloc(sizeof(int *));
-		mem = &i;
-		if (pthread_create(&context_ph->thread[*mem].thread, NULL, &routine,
-				&context_ph->thread[*mem]) == -1)
+		printf("creating thread %d\n", i);
+		if (pthread_create(&context_ph->thread[i].thread, NULL, &routine,
+				&context_ph->thread[i]) == -1)
 			return (-1);
-		free(mem);
-		mem = NULL;
 		i++;
 	}
 	i = 1;
@@ -50,8 +36,8 @@ int	launch_program(t_context_ph *context_ph)
 	{
 		if (pthread_join(context_ph->thread[i].thread, NULL) == -1)
 			return (-1);
+		printf("thread %d joined with success\n", i);
 		i++;
-		printf("end routine\n");
 	}
 	return (0);
 }

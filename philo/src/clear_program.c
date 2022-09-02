@@ -12,15 +12,30 @@
 
 #include "philosophers.h"
 
+static void	clear_mutex(t_mutex_ph *mutex)
+{
+	pthread_mutex_destroy(&mutex->mutex_fork);
+	pthread_mutex_destroy(&mutex->mutex_write);
+}
+
+static void	clear_thread(t_philo_ph *thread)
+{
+	clear_mutex(thread->mutex);
+	if (thread->mutex != NULL)
+	{
+		free(thread->mutex);
+		thread->mutex = NULL;
+	}
+}
+
 void	clear_program(t_context_ph *context_ph)
 {
 	int	i;
 
-	i = 0;
-	while (i < context_ph->nb_philo)
+	i = 1;
+	while (i <= context_ph->nb_philo)
 	{
-		pthread_mutex_destroy(&context_ph->thread[i].mutex_fork);
-		pthread_mutex_destroy(&context_ph->thread[i].mutex_write);
+		clear_thread(context_ph->thread + i);
 		i++;
 	}
 }
