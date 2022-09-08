@@ -71,7 +71,7 @@ static int	check_charac_validity(char *argv)
 	return (0);
 }
 
-int	check_args(t_context_ph *context_ph, char **argv)
+int	check_args(char **argv)
 {
 	int	i;
 
@@ -87,12 +87,6 @@ int	check_args(t_context_ph *context_ph, char **argv)
 			printf("Error\nInvalid argument at parameter #%d\n", i);
 			return (-1);
 		}
-	}
-	init_context_ph(context_ph, argv);
-	if (context_ph->nb_meals_required <= 0 && argv[5] != NULL)
-	{
-		printf("Number of meal asked is equal or less than 0\n");
-		return (-1);
 	}
 	return (0);
 }

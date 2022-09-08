@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "philosophers.h"
-#include <stdio.h>
 
 int	main(int argc, char **argv)
 {
@@ -24,7 +23,9 @@ int	main(int argc, char **argv)
 		"((( [number_of_times_each_philosopher_must_eat] )))\n");
 		return (-1);
 	}
-	if (check_args(&context_ph, argv) == -1
+	if (check_args(argv) == -1)
+		return (-1);
+	if (init_context_ph(&context_ph, argv) == -1
 		|| launch_program(&context_ph) == -1)
 	{
 		clear_program(&context_ph);

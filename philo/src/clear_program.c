@@ -6,7 +6,7 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 19:32:13 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/01 21:55:36 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:00:35 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,21 @@
 
 static void	clear_mutex(t_mutex_ph *mutex)
 {
-	pthread_mutex_destroy(&mutex->mutex_fork);
-	pthread_mutex_destroy(&mutex->mutex_write);
-}
-
-static void	clear_thread(t_philo_ph *thread)
-{
-	clear_mutex(thread->mutex);
-	if (thread->mutex != NULL)
-	{
-		free(thread->mutex);
-		thread->mutex = NULL;
-	}
+	pthread_mutex_destroy(&mutex->mutex);
+	free(mutex);
+	mutex = NULL;
 }
 
 void	clear_program(t_context_ph *context_ph)
 {
-	int	i;
-
-	i = 1;
-	while (i <= context_ph->nb_philo)
-	{
-		clear_thread(context_ph->thread + i);
-		i++;
-	}
+	if (context_ph->forks_tab != NULL)
+		free(context_ph->forks_tab);
+	if (context_ph->mutex_i != NULL)
+		clear_mutex(context_ph->mutex_i);
+	if (context_ph->mutex_fork != NULL)
+		clear_mutex(context_ph->mutex_fork);
+	if (context_ph->mutex_write != NULL)
+		clear_mutex(context_ph->mutex_write);
+	if (context_ph->mutex_start != NULL)
+		clear_mutex(context_ph->mutex_start);
 }

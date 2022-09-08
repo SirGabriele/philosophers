@@ -6,11 +6,32 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 21:32:25 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/01 16:29:28 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/08 13:09:54 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
+
+void	*ft_calloc(size_t size, size_t nmemb)
+{
+	unsigned char	*tab;
+	size_t			i;
+
+	i = 0;
+	if (size > 2147483647 || nmemb > 2147483647)
+		return (NULL);
+	tab = malloc(size * nmemb);
+	if (tab == NULL)
+		return (NULL);
+	else if (nmemb * size > 2147483647)
+		return (NULL);
+	while (i < nmemb * size)
+	{
+		tab[i] = '\0';
+		i++;
+	}
+	return ((void *)tab);
+}
 
 void	*ft_memset(void *s, int c, size_t n)
 {
