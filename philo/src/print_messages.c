@@ -22,5 +22,5 @@ void	print_message(t_context_ph *context_ph, int id, char *msg)
 	current = current_time.tv_sec * 1000000 + current_time.tv_usec;
 	start = context_ph->time_start_sim.tv_sec * 1000000;
 	start += context_ph->time_start_sim.tv_usec;
-	printf("%.0lld %d %s\n", (current - start) / 1000, id + 1, msg);	
+	printf("%lld %d %s\n", (current - start) / 1000, id + 1, msg);	
 }

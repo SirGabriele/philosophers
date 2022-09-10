@@ -14,20 +14,23 @@
 
 void	god_routine(t_context_ph *context_ph)
 {
-/*	int				id;
-	long double		start;
+/*	struct timeval		current_time;
+	int				id;
+	long double		current;
 	long double		last_meal;
 
-	start = context_ph->time_start_sim.tv_sec * 1000000;
-	start += context_ph->time_start_sim.tv_usec;
+	gettimeofday(&current_time, NULL);
+	current = current_time.tv_sec * 1000000 + current_time.tv_usec;
 	id = 0;
-	while (context_ph->red_alert != 1)
+	while (1)
 	{
 		last_meal = context_ph->thread[id].last_meal.tv_sec * 1000000;
-		last_meal += context_ph->thread[id].last_meal.tv_usec;
-		if (last_meal - start > context_ph->time_to_die * 1000)
+		last_meal += context_ph->thread[id].last_meal.tv_usec;;
+		if (current - last_meal > context_ph->time_to_die * 1000)
 		{
-			context_ph->red_alert = 1;
+			pthread_mutex_lock(&context_ph->mutex_red_alert->mutex);
+			context_ph->mutex_red_alert->data = 1;
+			pthread_mutex_unlock(&context_ph->mutex_red_alert->mutex);
 			return ;
 		}
 		id++;

@@ -45,9 +45,9 @@ static void	takes_forks_and_eats(t_context_ph *context_ph, int id)
 	pthread_mutex_lock(&context_ph->mutex_write->mutex);
 	print_message(context_ph, id, "has taken a fork");
 	pthread_mutex_unlock(&context_ph->mutex_write->mutex);
-	if (id == context_ph->nb_philo - 1)
+	if (id == context_ph->nb_philo - 1 && context_ph->mutex_red_alert->data == 0)
 		pthread_mutex_lock(&context_ph->mutex_fork[0].mutex);
-	else
+	else if (context_ph->mutex_red_alert->data == 0)
 		pthread_mutex_lock(&context_ph->mutex_fork[id + 1].mutex);
 	gettimeofday(&context_ph->thread[id].last_meal, NULL);
 	pthread_mutex_lock(&context_ph->mutex_write->mutex);
