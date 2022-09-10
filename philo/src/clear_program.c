@@ -29,6 +29,6 @@ void	clear_program(t_context_ph *context_ph)
 		clear_mutex(context_ph->mutex_fork);
 	if (context_ph->mutex_write != NULL)
 		clear_mutex(context_ph->mutex_write);
-	if (context_ph->mutex_start != NULL)
-		clear_mutex(context_ph->mutex_start);
+	if (context_ph->mutex_red_alert != NULL)
+		clear_mutex(context_ph->mutex_red_alert);
 }

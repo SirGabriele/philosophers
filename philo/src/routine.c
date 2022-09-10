@@ -6,76 +6,81 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 19:06:16 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/08 21:16:06 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/10 20:29:02 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+			//		add red_alert check in check_death
 
-
-
-
-/* FAIRE DES LOCK UNLOCK A CHAQUE UTILISATION DE ID*/
-
-
-
-
-
-
-
-
-static void	check_death(t_context_ph *context_ph, int id)
+static int	check_death(t_context_ph *context_ph, int id)
 {
-	printf("Start of sim %ld seconds | %ld\n", context_ph->time_start_sim.tv_sec, context_ph->time_start_sim.tv_usec);
-	printf("Current time %ld seconds | %ld\n", context_ph->thread[id].last_meal.tv_sec, context_ph->thread[id].last_meal.tv_usec);
-	(void)id;
+	struct timeval	current_time;
+	long long		current;
+	long long		last_meal;
+
+	if (context_ph->mutex_red_alert->data == 1)
+		return (-1);
+	gettimeofday(&current_time, NULL);
+	current = current_time.tv_sec * 1000000 + current_time.tv_usec;
+	last_meal = context_ph->thread[id].last_meal.tv_sec * 1000000;
+	last_meal += context_ph->thread[id].last_meal.tv_usec;
+	if (current - last_meal > context_ph->time_to_die * 1000)
+	{
+		pthread_mutex_lock(&context_ph->mutex_write->mutex);
+		print_message(context_ph, id, "died");
+		pthread_mutex_unlock(&context_ph->mutex_write->mutex);
+		pthread_mutex_lock(&context_ph->mutex_red_alert->mutex);
+		context_ph->mutex_red_alert->data = 1;
+		pthread_mutex_unlock(&context_ph->mutex_red_alert->mutex);
+		return (-1);
+	}
+	return (0);
 }
 
-static void	eats(t_context_ph *context_ph, int id)
+static void	takes_forks_and_eats(t_context_ph *context_ph, int id)
+{
+	pthread_mutex_lock(&context_ph->mutex_fork[id].mutex);
+	pthread_mutex_lock(&context_ph->mutex_write->mutex);
+	print_message(context_ph, id, "has taken a fork");
+	pthread_mutex_unlock(&context_ph->mutex_write->mutex);
+	if (id == context_ph->nb_philo - 1)
+		pthread_mutex_lock(&context_ph->mutex_fork[0].mutex);
+	else
+		pthread_mutex_lock(&context_ph->mutex_fork[id + 1].mutex);
+	gettimeofday(&context_ph->thread[id].last_meal, NULL);
+	pthread_mutex_lock(&context_ph->mutex_write->mutex);
+	print_message(context_ph, id, "has taken a fork");
+	print_message(context_ph, id, "is eating");
+	pthread_mutex_unlock(&context_ph->mutex_write->mutex);
+	ft_better_usleep(context_ph->time_to_eat * 1000);
+	pthread_mutex_unlock(&context_ph->mutex_fork[id].mutex);
+	if (id == context_ph->nb_philo - 1)
+		pthread_mutex_unlock(&context_ph->mutex_fork[0].mutex);
+	else
+		pthread_mutex_unlock(&context_ph->mutex_fork[id + 1].mutex);
+}
+
+int	routine(t_context_ph *context_ph, int id)
 {
 	gettimeofday(&context_ph->thread[id].last_meal, NULL);
-	usleep(context_ph->time_to_eat * 1000);
-}
-
-static void	takes_forks(t_context_ph *context_ph, int id)
-{
-	pthread_mutex_lock(&context_ph->mutex_fork->mutex);
-	if (id == 0)
+	while (1)
 	{
-		if (context_ph->forks_tab[id] == 1
-			&& context_ph->forks_tab[context_ph->nb_philo - 1] == 1)
-		{
-			context_ph->forks_tab[id] = 0;
-			context_ph->forks_tab[context_ph->nb_philo - 1] = 0;
-		}
+		if (check_death(context_ph, id) == -1)
+			return (-1);
+		takes_forks_and_eats(context_ph, id);
+		if (check_death(context_ph, id) == -1)
+			return (-1);
+		pthread_mutex_lock(&context_ph->mutex_write->mutex);
+		print_message(context_ph, id, "is sleeping");
+		pthread_mutex_unlock(&context_ph->mutex_write->mutex);
+		ft_better_usleep(context_ph->time_to_sleep * 1000);
+		if (check_death(context_ph, id) == -1)
+			return (-1);
+		pthread_mutex_lock(&context_ph->mutex_write->mutex);
+		print_message(context_ph, id, "is thinking");
+		pthread_mutex_unlock(&context_ph->mutex_write->mutex);
 	}
-	if (context_ph->forks_tab[id] && context_ph->forks_tab[id - 1])
-	{
-		context_ph->forks_tab[id] = 0;
-		context_ph->forks_tab[id - 1] = 0;
-	}
-	pthread_mutex_unlock(&context_ph->mutex_fork->mutex);
-	printf("%d\n", id);
-}
-
-void	routine(t_context_ph *context_ph, int id)
-{
-	int	i;
-
-	i = 0;
-	while (/*context_ph->thread[id].red_alert != 1*/ i < 1)
-	{
-		takes_forks(context_ph, id);
-		check_death(context_ph, id);
-		eats(context_ph, id);
-		check_death(context_ph, id);
-/*		sleeps(context_ph, id);*/usleep(context_ph->time_to_sleep * 1000);
-		check_death(context_ph, id);
-/*		thinks(context_ph, id);*/
-		check_death(context_ph, id);
-		i++;
-	}
-	(void)id;
-	return ;
+	return (0);
 }

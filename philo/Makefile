@@ -6,7 +6,7 @@
 #    By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/20 10:12:21 by kbrousse          #+#    #+#              #
-#    Updated: 2022/09/08 20:53:03 by kbrousse         ###   ########.fr        #
+#    Updated: 2022/09/10 22:22:09 by kbrousse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ NAME = philo
 SRC = main.c			\
 	check_args.c		\
 	launch_program.c	\
+	god_routine.c		\
 	routine.c			\
+	print_messages.c	\
 	clear_program.c
 
 UTILS = utils.c

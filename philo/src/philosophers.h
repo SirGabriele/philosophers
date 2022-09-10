@@ -34,8 +34,7 @@ struct s_philo_ph
 {
 	pthread_t			thread;
 	int					philo_id;
-	int					red_alert;
-	struct timeval	last_meal;
+	struct timeval		last_meal;
 };
 
 struct s_context_ph
@@ -51,22 +50,23 @@ struct s_context_ph
 	t_mutex_ph		*mutex_i;
 	t_mutex_ph		*mutex_fork;
 	t_mutex_ph		*mutex_write;
-	t_mutex_ph		*mutex_start;
+	t_mutex_ph		*mutex_red_alert;
 	struct timeval	time_start_sim;
 };
 
 int				check_args(char **argv);
 int				launch_program(t_context_ph *context_ph);
-void			routine(t_context_ph *context_ph, int id);
+void			god_routine(t_context_ph *context_ph);
+int				routine(t_context_ph *context_ph, int id);
 void			clear_program(t_context_ph *context_ph);
 
 //Init
 int				init_context_ph(t_context_ph *context_ph, char **argv);
 
 //Utils
+void			ft_better_usleep(int usec);
 void			*ft_calloc(size_t size, size_t nmemb);
-void			*ft_memset(void *s, int c, size_t n);
 int				is_an_int(char *tab);
 long int		ft_atol(const char *nptr);
-
+void			print_message(t_context_ph *context_ph, int id, char *msg);
 #endif

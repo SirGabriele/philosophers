@@ -6,11 +6,31 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/30 21:32:25 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/08 13:09:54 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/10 20:26:35 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philosophers.h"
+
+											//faire usleep par coups de 50 usec
+
+void	ft_better_usleep(int usec)
+{
+	struct timeval	current_time;
+	struct timeval	start_time;
+	long double		start;
+	long double		current;
+
+	gettimeofday(&start_time, NULL);
+	start = start_time.tv_sec * 1000000 + start_time.tv_usec;
+	gettimeofday(&current_time, NULL);
+	current = current_time.tv_sec * 1000000 + current_time.tv_usec;
+	while (current - start <= usec)
+	{
+		gettimeofday(&current_time, NULL);
+		current = current_time.tv_sec * 1000000 + current_time.tv_usec;
+	}
+}
 
 void	*ft_calloc(size_t size, size_t nmemb)
 {
@@ -31,22 +51,6 @@ void	*ft_calloc(size_t size, size_t nmemb)
 		i++;
 	}
 	return ((void *)tab);
-}
-
-void	*ft_memset(void *s, int c, size_t n)
-{
-	size_t	i;
-	char	*ptr;
-
-	i = 0;
-	ptr = s;
-	while (i < n)
-	{
-		*(char *)ptr = c;
-		ptr++;
-		i++;
-	}
-	return (s);
 }
 
 int	is_an_int(char *tab)

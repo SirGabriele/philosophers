@@ -12,6 +12,21 @@
 
 #include "philosophers.h"
 
+static int	additional_check(char **argv)
+{
+	if (ft_atol(argv[1]) <= 0)
+	{
+		printf("Number of philosophers must be more than 0\n");
+		return (-1);
+	}
+	if (argv[5] != NULL && ft_atol(argv[5]) <= 0)
+	{
+		printf("Number of meal asked is equal or less than 0\n");
+		return (-1);
+	}
+	return (0);
+}
+
 static int	check_minus_plus_usage(char *argv)
 {
 	int	i;
@@ -88,5 +103,7 @@ int	check_args(char **argv)
 			return (-1);
 		}
 	}
+	if (additional_check(argv) == -1)
+		return (-1);
 	return (0);
 }

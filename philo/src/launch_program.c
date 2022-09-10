@@ -6,7 +6,7 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 17:47:45 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/08 21:02:20 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/10 20:28:17 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ static void	*monitoring(void *ctx_ph)
 
 	i = 0;
 	context_ph = (t_context_ph *)ctx_ph;
-	pthread_mutex_lock(&context_ph->mutex_start->mutex);
-	pthread_mutex_unlock(&context_ph->mutex_start->mutex);
+	god_routine(context_ph);
 	while (i < context_ph->nb_philo)
 	{
 		if (pthread_join(context_ph->thread[i].thread, NULL) == -1)
@@ -33,16 +32,15 @@ static void	*monitoring(void *ctx_ph)
 static void	*philosopher(void *ctx_ph)
 {
 	t_context_ph	*context_ph;
-	int	id;
+	int				id;
 
 	context_ph = (t_context_ph *)ctx_ph;
 	pthread_mutex_lock(&context_ph->mutex_i->mutex);
 	id = context_ph->mutex_i->data;
-	(void)id;
-	context_ph->mutex_i->data++;;
+	context_ph->mutex_i->data++;
 	pthread_mutex_unlock(&context_ph->mutex_i->mutex);
-	pthread_mutex_lock(&context_ph->mutex_start->mutex);
-	pthread_mutex_unlock(&context_ph->mutex_start->mutex);
+	if (id % 2 == 1)
+		ft_better_usleep(100);
 	routine(context_ph, id);
 	return (NULL);
 }
@@ -52,17 +50,17 @@ static int	create_threads(t_context_ph *context_ph)
 	int	i;
 
 	i = 0;
+	gettimeofday(&context_ph->time_start_sim, NULL);
 	if (pthread_create(&context_ph->monitoring.thread, NULL, &monitoring,
 			context_ph) == -1)
 		return (-1);
 	while (i < context_ph->nb_philo)
 	{
 		if (pthread_create(&context_ph->thread[i].thread,
-			NULL, &philosopher,	context_ph) == -1)
+				NULL, &philosopher, context_ph) == -1)
 			return (-1);
 		i++;
 	}
-	pthread_mutex_unlock(&context_ph->mutex_start->mutex);
 	return (0);
 }
 
