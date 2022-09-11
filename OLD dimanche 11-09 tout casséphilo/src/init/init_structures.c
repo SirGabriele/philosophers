@@ -48,6 +48,11 @@ static int	init_mutex_context_ph(t_context_ph *context_ph)
 		return (-1);
 	context_ph->mutex_red_alert->data = 0;
 	pthread_mutex_init(&context_ph->mutex_red_alert->mutex, NULL);
+	context_ph->mutex_meal_cap = ft_calloc(sizeof(t_mutex_ph), 1);
+	if (context_ph->mutex_meal_cap == NULL)
+		return (-1);
+	context_ph->mutex_meal_cap->data = 0;
+	pthread_mutex_init(&context_ph->mutex_meal_cap->mutex, NULL);
 	return (0);
 }
 

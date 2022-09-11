@@ -51,6 +51,7 @@ struct s_context_ph
 	t_mutex_ph		*mutex_fork;
 	t_mutex_ph		*mutex_write;
 	t_mutex_ph		*mutex_red_alert;
+	t_mutex_ph		*mutex_meal_cap;
 	struct timeval	time_start_sim;
 };
 
@@ -64,7 +65,8 @@ void			clear_program(t_context_ph *context_ph);
 int				init_context_ph(t_context_ph *context_ph, char **argv);
 
 //Utils
-void			ft_better_usleep(int usec);
+long long		get_timestamp(void);
+int			ft_better_usleep(t_context_ph *context_ph, int usec);
 void			*ft_calloc(size_t size, size_t nmemb);
 int				is_an_int(char *tab);
 long int		ft_atol(const char *nptr);

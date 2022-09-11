@@ -12,24 +12,29 @@
 
 #include "../philosophers.h"
 
-											//faire usleep par coups de 50 usec
-
-void	ft_better_usleep(int usec)
+long long	get_timestamp(void)
 {
 	struct timeval	current_time;
-	struct timeval	start_time;
-	long double		start;
-	long double		current;
 
-	gettimeofday(&start_time, NULL);
-	start = start_time.tv_sec * 1000000 + start_time.tv_usec;
 	gettimeofday(&current_time, NULL);
-	current = current_time.tv_sec * 1000000 + current_time.tv_usec;
-	while (current - start <= usec)
+	return (current_time.tv_sec * 1000000 + current_time.tv_usec);
+}
+							
+							//ajouter meal_cap
+int	ft_better_usleep(t_context_ph *context_ph, int usec)
+{
+	long long		start;
+
+	start = get_timestamp();
+	while (get_timestamp() - start <= usec)
 	{
-		gettimeofday(&current_time, NULL);
-		current = current_time.tv_sec * 1000000 + current_time.tv_usec;
+		pthread_mutex_lock(&context_ph->mutex_red_alert->mutex);
+		if (context_ph->mutex_red_alert->data == 1)
+			return (-1); ;
+		pthread_mutex_unlock(&context_ph->mutex_red_alert->mutex);
+		usleep(50);
 	}
+	return (0);
 }
 
 void	*ft_calloc(size_t size, size_t nmemb)

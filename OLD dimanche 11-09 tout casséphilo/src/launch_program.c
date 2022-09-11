@@ -40,8 +40,9 @@ static void	*philosopher(void *ctx_ph)
 	context_ph->mutex_i->data++;
 	pthread_mutex_unlock(&context_ph->mutex_i->mutex);
 	if (id % 2 == 1)
-		ft_better_usleep(100);
+		usleep(100);
 	routine(context_ph, id);
+	printf("Thread %d quitted its routine\n", id + 1);
 	return (NULL);
 }
 

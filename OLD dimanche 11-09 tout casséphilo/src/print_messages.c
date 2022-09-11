@@ -14,13 +14,13 @@
 
 void	print_message(t_context_ph *context_ph, int id, char *msg)
 {
-	struct timeval	current_time;
 	long long		current;
 	long long		start;
 
-	gettimeofday(&current_time, NULL);
-	current = current_time.tv_sec * 1000000 + current_time.tv_usec;
+	current = get_timestamp();
 	start = context_ph->time_start_sim.tv_sec * 1000000;
 	start += context_ph->time_start_sim.tv_usec;
-	printf("%lld %d %s\n", (current - start) / 1000, id + 1, msg);	
+	pthread_mutex_lock(&context_ph->mutex_write->mutex);
+	printf("%lld %d %s\n", (current - start) / 1000, id + 1, msg);
+	pthread_mutex_unlock(&context_ph->mutex_write->mutex);	
 }
