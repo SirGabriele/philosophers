@@ -6,7 +6,7 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 18:37:44 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/13 01:27:28 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/13 21:32:43 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ struct s_philo_ph
 {
 	pthread_t		thread;
 	struct timeval	last_meal;
+	pthread_mutex_t	mutex_last_meal;
+	int				meal_counter;
 	pthread_mutex_t	mutex_fork;
 };
 
@@ -80,10 +82,17 @@ void		init_context_ph(t_context_ph *context_ph, char **argv);
 int			launch_program(t_context_ph *context_ph);
 void		routine(t_context_ph *context_ph, int id);
 
+//routine
+void		god_routine(t_context_ph *context_ph);
+
 // utils functions
+long long	get_timestamp(void);
+int			ft_better_usleep(t_context_ph *context_ph, int usec);
 int			ft_strlen_ignore_left_zeros(char *str);	
 int			is_an_int(char *tab);
 void		*ft_calloc(size_t size, size_t nmemb);
 int			ft_atoi(const char *nptr);
-
+void		print_message(t_context_ph *context_ph, int id, char *msg);
+void		unlock_death_and_meal_mutex(t_context_ph *context_ph);
+void		lock_death_and_meal_mutex(t_context_ph *context_ph);
 #endif

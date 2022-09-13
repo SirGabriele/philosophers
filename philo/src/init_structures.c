@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philosophers.h"
+#include "philosophers.h"
 
 void	init_mutex_structure(t_mutex_ph *mutex)
 {
@@ -18,7 +18,7 @@ void	init_mutex_structure(t_mutex_ph *mutex)
 	pthread_mutex_init(&mutex->mutex, NULL);
 }
 
-void	init_mutex_fork_in_each_thread(t_context_ph *context_ph)
+void	init_mutex_in_each_thread(t_context_ph *context_ph)
 {
 	int	i;
 
@@ -26,6 +26,8 @@ void	init_mutex_fork_in_each_thread(t_context_ph *context_ph)
 	while (i < context_ph->nb_philo)
 	{
 		pthread_mutex_init(&context_ph->thread[i].mutex_fork, NULL);
+		pthread_mutex_init(&context_ph->thread[i].mutex_last_meal, NULL);
+		context_ph->thread[i].meal_counter = 0;
 		i++;
 	}
 }
@@ -45,7 +47,7 @@ void	fill_data_struct_context_ph(t_context_ph *context_ph, char **argv)
 void	init_context_ph(t_context_ph *context_ph, char **argv)
 {
 	fill_data_struct_context_ph(context_ph, argv);
-	init_mutex_fork_in_each_thread(context_ph);
+	init_mutex_in_each_thread(context_ph);
 	init_mutex_structure(&context_ph->mutex_i);
 	init_mutex_structure(&context_ph->mutex_death_alert);
 	init_mutex_structure(&context_ph->mutex_meal_alert);

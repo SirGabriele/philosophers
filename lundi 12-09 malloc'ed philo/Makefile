@@ -6,7 +6,7 @@
 #    By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/20 10:12:21 by kbrousse          #+#    #+#              #
-#    Updated: 2022/09/13 20:56:23 by kbrousse         ###   ########.fr        #
+#    Updated: 2022/09/12 19:47:57 by kbrousse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,16 @@ SRC = main.c			\
 	launch_program.c	\
 	god_routine.c		\
 	routine.c			\
-	utils.c				\
-	utils_two.c			\
-	init_structures.c
+	print_messages.c	\
+	clear_program.c
 
-SRCS = $(addprefix src/, $(SRC))
+UTILS = utils.c
+
+INIT = init_structures.c
+
+SRCS = $(addprefix src/, $(SRC))		\
+	$(addprefix src/utils/, $(UTILS))	\
+	$(addprefix src/init/, $(INIT))
 
 CC = gcc
 

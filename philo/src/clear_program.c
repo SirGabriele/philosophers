@@ -12,7 +12,7 @@
 
 #include "philosophers.h"
 
-static void	clear_mutex_fork_in_each_thread(t_context_ph *context_ph)
+static void	clear_mutex_in_each_thread(t_context_ph *context_ph)
 {
 	int	i;
 
@@ -20,16 +20,17 @@ static void	clear_mutex_fork_in_each_thread(t_context_ph *context_ph)
 	while (i < context_ph->nb_philo)
 	{
 		pthread_mutex_destroy(&context_ph->thread[i].mutex_write);
+		pthread_mutex_destroy(&context_ph->thread[i].mutex_last_meal);
 		i++;
 	}
 }
 
 void	clear_program(t_context_ph *context_ph)
 {
-	clear_mutex_fork_in_each_thread(context_ph);
+	clear_mutex_each_thread(context_ph);
 	pthread_mutex_destroy(&context_ph->mutex_i.mutex);
-	pthread_mutex_destroy(&context_ph->mutex_write.mutex);
 	pthread_mutex_destroy(&context_ph->mutex_death_alert.mutex);
 	pthread_mutex_destroy(&context_ph->mutex_meal_alert.mutex);
 	pthread_mutex_destroy(&context_ph->mutex_meal_finished.mutex);
+	pthread_mutex_destroy(&context_ph->mutex_write);
 }
