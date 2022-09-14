@@ -87,12 +87,10 @@ void		god_routine(t_context_ph *context_ph);
 
 // utils functions
 long long	get_timestamp(void);
-int			ft_better_usleep(t_context_ph *context_ph, int usec);
+void			ft_better_usleep(t_context_ph *context_ph, int usec);
 int			ft_strlen_ignore_left_zeros(char *str);	
 int			is_an_int(char *tab);
 void		*ft_calloc(size_t size, size_t nmemb);
 int			ft_atoi(const char *nptr);
 void		print_message(t_context_ph *context_ph, int id, char *msg);
-void		unlock_death_and_meal_mutex(t_context_ph *context_ph);
-void		lock_death_and_meal_mutex(t_context_ph *context_ph);
 #endif
