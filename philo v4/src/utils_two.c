@@ -27,21 +27,21 @@ void	ft_better_usleep(t_context_ph *context_ph, int usec)
 	start = get_timestamp();
 	while (get_timestamp() - start <= usec)
 	{
-				pthread_mutex_lock(&context_ph->mutex_death_alert.mutex);
-				if (context_ph->meal_limit > 0)
-					pthread_mutex_lock(&context_ph->mutex_meal_alert.mutex);
+		pthread_mutex_lock(&context_ph->mutex_death_alert.mutex);
+		if (context_ph->meal_limit > 0)
+			pthread_mutex_lock(&context_ph->mutex_meal_alert.mutex);
 		if (context_ph->mutex_death_alert.data == 1
 			|| context_ph->mutex_meal_alert.data == 1)
 		{
-					pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
-					if (context_ph->meal_limit > 0)
-						pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
+			pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
+			if (context_ph->meal_limit > 0)
+				pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
 			return ;
 		}
-				pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
-				if (context_ph->meal_limit > 0)
-					pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
-		usleep(50);
+		pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
+		if (context_ph->meal_limit > 0)
+			pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
+		usleep(10);
 	}
 }
 
@@ -53,24 +53,24 @@ void	print_message(t_context_ph *context_ph, int id, char *msg)
 	current = get_timestamp();
 	start = context_ph->time_start_sim.tv_sec * 1000000;
 	start += context_ph->time_start_sim.tv_usec;
-			pthread_mutex_lock(&context_ph->mutex_death_alert.mutex);
-			if (context_ph->meal_limit > 0)
-				pthread_mutex_lock(&context_ph->mutex_meal_alert.mutex);
+	pthread_mutex_lock(&context_ph->mutex_death_alert.mutex);
+	if (context_ph->meal_limit > 0)
+		pthread_mutex_lock(&context_ph->mutex_meal_alert.mutex);
 	if (context_ph->mutex_death_alert.data == 1
 		|| context_ph->mutex_meal_alert.data == 1)
 	{
-//					pthread_mutex_lock(&context_ph->mutex_write);
-	//				printf("Death | Meal limit detected\n");
-		//			pthread_mutex_unlock(&context_ph->mutex_write);
-				pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
-				if (context_ph->meal_limit > 0)
-					pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
+//		pthread_mutex_lock(&context_ph->mutex_write);
+//		printf("Death | Meal limit detected\n");
+//		pthread_mutex_unlock(&context_ph->mutex_write);
+		pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
+		if (context_ph->meal_limit > 0)
+			pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
 		return ;
 	}
 	pthread_mutex_lock(&context_ph->mutex_write);
 	printf("%lld %d %s\n", ((current - start) / 1000), id + 1, msg);
 	pthread_mutex_unlock(&context_ph->mutex_write);
-				pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
-			if (context_ph->meal_limit > 0)
-				pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
+	pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
+	if (context_ph->meal_limit > 0)
+		pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
 }

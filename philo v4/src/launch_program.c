@@ -50,6 +50,7 @@ int	launch_program(t_context_ph *context_ph)
 			return (-1);
 		i++;
 	}
+	usleep(100);
 	if (pthread_create(&context_ph->monitoring, NULL,
 			&monitoring, context_ph) == -1)
 		return (-1);

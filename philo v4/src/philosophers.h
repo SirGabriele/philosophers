@@ -87,7 +87,7 @@ void		god_routine(t_context_ph *context_ph);
 
 // utils functions
 long long	get_timestamp(void);
-void			ft_better_usleep(t_context_ph *context_ph, int usec);
+void		ft_better_usleep(t_context_ph *context_ph, int usec);
 int			ft_strlen_ignore_left_zeros(char *str);	
 int			is_an_int(char *tab);
 void		*ft_calloc(size_t size, size_t nmemb);
