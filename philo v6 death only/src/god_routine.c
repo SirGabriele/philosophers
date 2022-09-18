@@ -12,15 +12,12 @@
 
 #include "philosophers.h"
 
-//peut déplacer le mutex du die dans le if de la fonction check_death
 static void	print_message_death(t_context_ph *context_ph, int id)
 {
 	long long	current;
 
 	current = get_timestamp();
-	pthread_mutex_lock(&context_ph->mutex_write);
 	printf("\e[41m%5lld %3d died\e[0m\n", (current - context_ph->time_start_sim) / 1000, id + 1);
-	pthread_mutex_unlock(&context_ph->mutex_write);
 }
 
 /*static void	check_meal_limit(t_context_ph *context_ph)
@@ -40,9 +37,11 @@ static int	check_death(t_context_ph *context_ph, int id)
 	ts = get_timestamp();
 	if (((ts - lm) / 1000) > context_ph->time_to_die)
 	{
+		pthread_mutex_lock(&context_ph->mutex_write);
 		pthread_mutex_lock(&context_ph->mutex_death_alert.mutex);
 		context_ph->mutex_death_alert.data = 1;
 		print_message_death(context_ph, id);
+		pthread_mutex_unlock(&context_ph->mutex_write);
 		pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
 		return (-1);
 	}
