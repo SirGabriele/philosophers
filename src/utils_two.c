@@ -12,6 +12,18 @@
 
 #include "philosophers.h"
 
+void	lock_death_meal_alert(t_context_ph *context_ph)
+{
+	pthread_mutex_lock(&context_ph->mutex_death_alert.mutex);
+	pthread_mutex_lock(&context_ph->mutex_meal_alert.mutex);
+}
+
+void	unlock_death_meal_alert(t_context_ph *context_ph)
+{
+	pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex);
+	pthread_mutex_unlock(&context_ph->mutex_meal_alert.mutex);
+}
+
 long long	get_timestamp(void)
 {
 	struct timeval	current_time;
@@ -27,13 +39,14 @@ void	ft_better_usleep(t_context_ph *context_ph, int usec)
 	start = get_timestamp();
 	while (get_timestamp() - start < usec)
 	{
-		pthread_mutex_lock(&context_ph->mutex_death_alert.mutex); //lock repas
-		if (context_ph->mutex_death_alert.data == 1)
+		lock_death_meal_alert(context_ph);
+		if (context_ph->mutex_death_alert.data == 1
+			|| context_ph->mutex_meal_alert.data == 1)
 		{
-			pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex); //unlock repas
+			unlock_death_meal_alert(context_ph);
 			return ;
 		}
-		pthread_mutex_unlock(&context_ph->mutex_death_alert.mutex); //unlock repas
+		unlock_death_meal_alert(context_ph);
 		usleep(50);
 	}
 }

@@ -15,7 +15,7 @@
 
 # include <stdio.h>
 ///////////////////////////
-//	printf;
+//	printf
 ///////////////////////////
 
 # include <stdlib.h>
@@ -27,6 +27,8 @@
 ///////////////////////////
 //	pthread_mutex_init
 //	pthread_mutex_destroy
+//	pthread_mutex_lock
+//	pthread_mutex_unlock
 //	pthread_create
 //	pthread_join
 ///////////////////////////
@@ -74,7 +76,7 @@ struct s_context_ph
 	t_mutex_ph		mutex_meal_alert;
 	t_mutex_ph		mutex_meal_finished;
 	pthread_mutex_t	mutex_write;
-	struct timeval	time_start_sim;
+	long long		time_start_sim;
 };
 
 int			check_args(char **argv);
@@ -85,7 +87,15 @@ void		routine(t_context_ph *context_ph, int id);
 //routine
 void		god_routine(t_context_ph *context_ph);
 
+//mesages
+void		print_message_think(t_context_ph *context_ph, int id);
+void		print_message_fork(t_context_ph *context_ph, int id);
+void		print_message_eat(t_context_ph *context_ph, int id);
+void		print_message_sleep(t_context_ph *context_ph, int id);
+
 // utils functions
+void		lock_death_meal_alert(t_context_ph *context_ph);
+void		unlock_death_meal_alert(t_context_ph *context_ph);
 long long	get_timestamp(void);
 void		ft_better_usleep(t_context_ph *context_ph, int usec);
 int			ft_strlen_ignore_left_zeros(char *str);	

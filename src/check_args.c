@@ -6,7 +6,7 @@
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 17:35:13 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/13 21:32:17 by kbrousse         ###   ########.fr       */
+/*   Updated: 2022/09/21 17:55:42 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ int	check_args(char **argv)
 			printf("Error\nInvalid argument at parameter #%d\n", i);
 			return (-1);
 		}
-		if (i == 1 && ft_atoi(argv[i]) > 1024)
+		if ((i == 1 && ft_atoi(argv[i]) > 1024)
+			|| (i == 1 && ft_atoi(argv[i]) == 0))
 		{
 			printf("Error\nInvalid argument at parameter #%d\n", i);
 			return (-1);

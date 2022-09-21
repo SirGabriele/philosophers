@@ -5,32 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/01 19:32:13 by kbrousse          #+#    #+#             */
-/*   Updated: 2022/09/08 15:00:35 by kbrousse         ###   ########.fr       */
+/*   Created: 2022/09/13 00:13:27 by kbrousse          #+#    #+#             */
+/*   Updated: 2022/09/13 01:28:21 by kbrousse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void	clear_mutex(t_mutex_ph *mutex)
+static void	clear_mutex_in_each_thread(t_context_ph *context_ph)
 {
-	pthread_mutex_destroy(&mutex->mutex);
-	free(mutex);
-	mutex = NULL;
+	int	i;
+
+	i = 0;
+	while (i < context_ph->nb_philo)
+	{
+		pthread_mutex_destroy(&context_ph->thread[i].mutex_last_meal);
+		i++;
+	}
 }
 
 void	clear_program(t_context_ph *context_ph)
 {
-	if (context_ph->forks_tab != NULL)
-		free(context_ph->forks_tab);
-	if (context_ph->mutex_i != NULL)
-		clear_mutex(context_ph->mutex_i);
-	if (context_ph->mutex_fork != NULL)
-		clear_mutex(context_ph->mutex_fork);
-	if (context_ph->mutex_write != NULL)
-		clear_mutex(context_ph->mutex_write);
-	if (context_ph->mutex_red_alert != NULL)
-		clear_mutex(context_ph->mutex_red_alert);
-	if (context_ph->mutex_meal_cap != NULL)
-		clear_mutex(context_ph->mutex_meal_cap);
+	clear_mutex_in_each_thread(context_ph);
+	pthread_mutex_destroy(&context_ph->mutex_i.mutex);
+	pthread_mutex_destroy(&context_ph->mutex_death_alert.mutex);
+	pthread_mutex_destroy(&context_ph->mutex_meal_alert.mutex);
+	pthread_mutex_destroy(&context_ph->mutex_meal_finished.mutex);
+	pthread_mutex_destroy(&context_ph->mutex_write);
 }

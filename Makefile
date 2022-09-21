@@ -6,7 +6,7 @@
 #    By: kbrousse <kbrousse@student.42angoulem      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/20 10:12:21 by kbrousse          #+#    #+#              #
-#    Updated: 2022/09/13 20:56:23 by kbrousse         ###   ########.fr        #
+#    Updated: 2022/09/21 17:53:19 by kbrousse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,13 +19,15 @@ SRC = main.c			\
 	routine.c			\
 	utils.c				\
 	utils_two.c			\
-	init_structures.c
+	messages.c			\
+	init_structures.c	\
+	clear_program.c
 
 SRCS = $(addprefix src/, $(SRC))
 
 CC = gcc
 
-FLAGS =	-Wall -Wextra -Werror -g -pthread
+FLAGS =	-Wall -Wextra -Werror -g -pthread 
 
 OBJS = $(SRCS:.c=.o)
 
